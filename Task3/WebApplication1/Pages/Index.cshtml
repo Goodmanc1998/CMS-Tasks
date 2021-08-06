@@ -1,0 +1,61 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+
+
+
+    <input type="text" id="formInput" /><br />
+    <button type="button" onclick="makeCode()" >Process</button>
+    <button type="button" onclick="Popup()">Print</button>
+
+        <div id="qrcode" width="160px" height="160px">
+        </div>
+
+
+    <script type="text/javascript" src="~/js/qrcode.js">
+    </script>
+
+
+    <script type="text/javascript">
+        var qrcode = new QRCode("qrcode", {
+            width: 75,
+            height: 75
+        });
+
+        async function makeCode() {
+
+
+            var inputString = document.getElementById("formInput");
+
+
+            var strJobID = Number(inputString.value.slice(0, 8));
+            var strProductID = Number(inputString.value.slice(8));
+
+
+            qrcode.makeCode("https://mywebsite.com/QRCode - Job ID : " + strJobID + " ItemID : " + strProductID);
+
+        }
+
+        function Popup() {
+
+            var mywindow = window.open('', 'Print Window', 'height=400,width=600');
+            mywindow.document.write('<html><head><title></title>');
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(document.getElementById("qrcode").innerHTML);
+            mywindow.document.write('</body></html>');
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+
+    </script>
+
+
+</div>
